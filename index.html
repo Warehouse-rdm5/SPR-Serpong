@@ -470,14 +470,22 @@
             let auditData = [];
             for(let i=0; i<products.length; i++) {
               let statusVal = document.getElementById('m_'+i).checked ? 'match' : (document.getElementById('nm_'+i).checked ? 'notmatch' : 'empty');
+              
+              // MENGAMBIL NILAI QTY DARI FORM
+              let qtyVal = document.getElementById('qty_'+i) ? document.getElementById('qty_'+i).value.trim() : '';
+              
               if (['03','04','05'].includes(suffix)) {
                   let isVerified = document.getElementById('verified_'+i).value === 'true', remarkVal = document.getElementById('remark_'+i) ? document.getElementById('remark_'+i).value : '';
                   if (statusVal === 'notmatch' && !isVerified) { Swal.showValidationMessage('Pastikan status "Not Match" sudah dicek ke Stok!'); return false; }
-                  auditData.push({ row: products[i].row, status: statusVal, remark: remarkVal });
+                  
+                  // MENGIRIM PRODUCT, MID, DAN QTY KE BACKEND
+                  auditData.push({ row: products[i].row, product: products[i].product, mid: products[i].mid, status: statusVal, remark: remarkVal, qty: qtyVal });
               } else {
                   let remark = document.getElementById('remark_'+i) ? document.getElementById('remark_'+i).value.trim() : '';
                   if(statusVal === 'notmatch' && remark === '') { Swal.showValidationMessage('Keterangan WAJIB diisi untuk produk Not Match!'); return false; }
-                  auditData.push({ row: products[i].row, status: statusVal, remark: remark });
+                  
+                  // MENGIRIM PRODUCT, MID, DAN QTY KE BACKEND
+                  auditData.push({ row: products[i].row, product: products[i].product, mid: products[i].mid, status: statusVal, remark: remark, qty: qtyVal });
               }
             } return auditData;
           }
